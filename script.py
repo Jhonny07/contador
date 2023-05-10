@@ -1,51 +1,44 @@
-# Contador de Palavras
-Simples contador de palavras em Python para a matéria de Arquiteturas Cloud de BDAg
+#from pprint import pprint as print
+from unidecode import unidecode
+import re
+import os
+
+while True:
+
+    # Limpa o terminal
+    os.system("cls")
 
 
-## Explicação do código:
+    with open("texto.txt", "r", encoding="utf8") as file:
+        
+        texto = file.read()
 
-### 1 - 
+        texto_sem_acentuacao = unidecode(texto)
+        texto_sem_acentuacao_ou_especiais = re.sub('[^a-zA-Z0-9 \\\]', '', texto_sem_acentuacao).lower()
+        
+        palavras = texto_sem_acentuacao_ou_especiais.split(" ")
 
-- Com o texto em mãos, faço o processo de retirar acentos especiais com regex e deixo ele todo em minúsculo para não dar conflito entre "teste" e "Teste" por exemplo.
-- Depois disso, separo as palavras com o .split(" ") e crio um objeto do tipo set() para gravar as palavras exatamente uma vez numa lista com elemento únicos
-- Logo após, defino a frequência das palavras na linha 34 e ordeno com uma função anônima e o sorted na linha 38.
-- Deixo tudo preparado somente para printar depois quando o usuário escolher.
- ```
-texto = file.read()
+        quantidade_de_palavras = len(palavras)
 
-texto_sem_acentuacao = unidecode(texto)
-texto_sem_acentuacao_ou_especiais = re.sub('[^a-zA-Z0-9 \\\]', '', texto_sem_acentuacao).lower()
+        frequencias = dict()
 
-palavras = texto_sem_acentuacao_ou_especiais.split(" ")
+        palavra_array_uniq = set()
 
-quantidade_de_palavras = len(palavras)
+        # Monto uma lista com as palavras onde uma palavra só pode ser colocada uma vez nela.
+        for palavra in palavras:
+            palavra_array_uniq.add(palavra)
 
-frequencias = dict()
+        # Monto o dicionário que terá as frequências de cada palavra
+        for palavra in list(palavra_array_uniq):
+            frequencias[palavra] = 0
 
-palavra_array_uniq = set()
+        # Alimento o dicionário de frequências
+        for palavra in palavras:
+            frequencias[palavra] += 1
 
-# Monto uma lista com as palavras onde uma palavra só pode ser colocada uma vez nela.
-for palavra in palavras:
-    palavra_array_uniq.add(palavra)
+        palavras_ordenado = sorted(frequencias.items(), key=lambda x: x[1], reverse=True)
 
-# Monto o dicionário que terá as frequências de cada palavra
-for palavra in list(palavra_array_uniq):
-    frequencias[palavra] = 0
-
-# Alimento o dicionário de frequências
-for palavra in palavras:
-    frequencias[palavra] += 1
-
-palavras_ordenado = sorted(frequencias.items(), key=lambda x: x[1], reverse=True)
-
-
-```
-## 2 -
-- Crio uma interface simples CLI para que o usuário escolha a função.
-- Printo os elementos pedidos pelo usuário e depois limpo a tela
-- Pergunto se ele deseja entrar em outro item do menu ou se quer fechar o script
-```
-print("-="*10)
+        print("-="*10)
         print("CONTADOR DE PALAVRAS")
         print("-="*10)
 
@@ -103,4 +96,4 @@ print("-="*10)
             continue
         elif acao2 == 2:
             quit()
-```
+        
